@@ -28,8 +28,8 @@ button,input,select,textarea{font-family:inherit}
 .lfb{background:#fff;border-left:1px solid #E2E8F0;overflow-y:auto;flex-shrink:0}
 .lfb.o{width:230px}.lfb.c{width:0;overflow:hidden;border:none}
 /* Header */
-.hlo{display:flex;align-items:center;padding:0 14px;height:100%;border-right:1px solid #E2E8F0;cursor:pointer;flex-shrink:0;transition:min-width .2s}
-.hlo.w{min-width:200px}.hlo.n{min-width:48px;padding:0 12px;justify-content:center}
+.hlo{display:flex;align-items:center;padding:0 16px;height:100%;border-right:1px solid #E2E8F0;cursor:pointer;flex-shrink:0;transition:min-width .2s;background:linear-gradient(135deg,#0F2010,#1B3D1D)}
+.hlo.w{min-width:220px}.hlo.n{min-width:52px;padding:0 14px;justify-content:center}
 .hlo img{height:30px;object-fit:contain}
 .hse{flex:1;padding:0 14px}.hsw{position:relative;max-width:340px;width:100%}
 .hsi{width:100%;height:30px;border:1px solid #E2E8F0;border-radius:15px;padding:0 10px 0 28px;font-size:12px;background:#F8FAFC;outline:none}
@@ -550,7 +550,7 @@ function bucheFAAbschluss(faId){
 function header(){
   const w=S.sideW;
   return`<header class="lh">
-  <div class="hlo ${w?'w':'n'}" onclick="set({sideW:!S.sideW})"><img src="${LOGO}" alt="CANNOS" style="height:30px;object-fit:contain"/></div>
+  <div class="hlo ${w?'w':'n'}" onclick="set({sideW:!S.sideW})"><img src="${LOGO}" alt="CANNOS" style="height:38px;object-fit:contain"/></div>
   <div class="hse"><div class="hsw"><span class="hsic">🔍</span><input class="hsi" type="text" placeholder="Artikel, Kunden, Chargen, Aufträge …" onclick="event.stopPropagation()"/></div></div>
   <div class="hac">
     <div class="hib" title="Compliance-Warnungen" onclick="nav(&#39;chargenfreigaben&#39;)">🔔<span class="hbdg"></span></div>
@@ -568,7 +568,7 @@ function sidebar(){
   const quar=DB.chargen.filter(c=>c.status==='QUARANTAENE').length;
   return`<nav class="ls ${w?'w':'n'}">
   <div class="sbr">
-    <img src="${LOGO}" style="height:${w?28:22}px;object-fit:contain;object-position:left;max-width:${w?150:28}px"/>
+    <img src="${LOGO}" style="height:${w?34:26}px;object-fit:contain;object-position:left;max-width:${w?160:30}px"/>
     <button onclick="set({sideW:!S.sideW})" style="margin-left:auto;width:22px;height:22px;border-radius:4px;color:#4A6B4C;font-size:10px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;flex-shrink:0">${w?'◀':'▶'}</button>
   </div>
   <div class="snv">${NAV.map(g=>{
@@ -3217,7 +3217,7 @@ function searchDropdown() {
 function header() {
   var w = S.sideW;
   return '<header class="lh">'+
-  '<div class="hlo '+(w?'w':'n')+'" onclick="set({sideW:!S.sideW})"><img src="'+LOGO+'" alt="CANNOS" style="height:30px;object-fit:contain"/></div>'+
+  '<div class="hlo '+(w?'w':'n')+'" onclick="set({sideW:!S.sideW})"><img src="'+LOGO+'" alt="CANNOS" style="height:38px;object-fit:contain"/></div>'+
   '<div class="hse"><div class="hsw" style="position:relative">'+
   '<span class="hsic">🔍</span>'+
   '<input class="hsi" type="text" placeholder="Artikel, Kunden, Chargen, Aufträge, Belege …" '+
