@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" href="data:," />
 <title>CANNOS ERP – Medical Cannabis Operating System</title>
 <script>
 // Config aus cannos_config.js laden (wird via GitHub separat hochgeladen)
@@ -3043,8 +3044,9 @@ function vMindestbestand() {
 }
 
 /* 10. DASHBOARD ERWEITERN: Mindestbestand-Alert */
-var _origVDashboard = vDashboard;
-function vDashboard() {
+(function() {
+  var _origVDashboard = vDashboard;
+  vDashboard = function() {
   var basis = _origVDashboard();
   var unter = checkMindestbestand().filter(function(r){return !r.ok;});
   if(unter.length) {
@@ -3056,7 +3058,8 @@ function vDashboard() {
     basis = basis.replace('<div class="kpi-g">', alert + '<div class="kpi-g">');
   }
   return basis;
-}
+  };
+})();
 
 /* 11. MAHNLAUF (vollständig) */
 function runMahnlauf() {
@@ -3095,8 +3098,9 @@ function runMahnlauf() {
 })();
 
 /* 13. ROUTER ERWEITERN */
-var _origCvR3 = cv;
-function cv() {
+(function() {
+  var _origCvR3 = cv;
+  cv = function() {
   switch(S.view) {
     case 'leads':           return vLeads();
     case 'crm-angebote':   return vCRMAngebote();
@@ -3105,7 +3109,8 @@ function cv() {
     case 'guv':            return vGuV();
     default:               return _origCvR3();
   }
-}
+  };
+})();
 
 
 // ═══ RUNDE 4: Suche · Paginierung · MHD-Vorschau · Inventur-FiBu ═══
@@ -3291,8 +3296,9 @@ function vMHDVorschau() {
 }
 
 // Dashboard MHD-Alert hinzufügen
-var _origVDashboardR4 = vDashboard;
-function vDashboard() {
+(function() {
+  var _origVDashboardR4 = vDashboard;
+  vDashboard = function() {
   var basis = _origVDashboardR4();
   var ablauf30 = getMHDVorschau(30);
   if(ablauf30.length) {
@@ -3303,7 +3309,8 @@ function vDashboard() {
     basis = basis.replace('<div class="kpi-g">', alert + '<div class="kpi-g">');
   }
   return basis;
-}
+  };
+})();
 
 /* ── INVENTUR-BUCHUNGSSATZ ───────────────────────────────── */
 function bucheInventurDifferenz(inventurId, positionen) {
@@ -3370,8 +3377,9 @@ function vInventur() {
 
 /* ── PAGINIERUNG IN KERN-VIEWS ───────────────────────────── */
 // Artikel-Liste mit Paginierung
-var _origVArtikel = vArtikel;
-function vArtikel() {
+(function() {
+  var _origVArtikel = vArtikel;
+  vArtikel = function() {
   if(S.artDetail) return vArtikelDetail(S.artDetail);
   var p = paginate(DB.artikel, 'artikel');
   return '<div class="ib">ℹ️ <span>Quelltabelle: <code>artikel</code> (cannos_schema_v1) · Klick → Detail</span></div>'+
@@ -3392,11 +3400,13 @@ function vArtikel() {
     '</tr>';
   }).join('')+
   '</tbody></table></div>'+pageBar('artikel',p.pages,p.pg,p.total)+'</div>';
-}
+  };
+})();
 
 // Buchungsjournal mit Paginierung
-var _origVBuchungsjournal = vBuchungsjournal;
-function vBuchungsjournal() {
+(function() {
+  var _origVBuchungsjournal = vBuchungsjournal;
+  vBuchungsjournal = function() {
   var sorted = DB.buchungen.slice().sort(function(a,b){return b.id-a.id;});
   var p = paginate(sorted, 'buchungen');
   return '<div class="ib">ℹ️ <span><code>buchungssatz</code> (cannos_schema_v5) · SKR04 · GoBD §146 unveränderlich</span></div>'+
@@ -3416,11 +3426,13 @@ function vBuchungsjournal() {
     '</tr>';
   }).join('')+
   '</tbody></table></div>'+pageBar('buchungen',p.pages,p.pg,p.total)+'</div>';
-}
+  };
+})();
 
 // BtM-Buch mit Paginierung
-var _origVBtmBuch = vBtmBuch;
-function vBtmBuch() {
+(function() {
+  var _origVBtmBuch = vBtmBuch;
+  vBtmBuch = function() {
   var fil = S.btmFilter==='ALLE' ? DB.btm_buch : DB.btm_buch.filter(function(e){return e.typ===S.btmFilter;});
   var sorted = fil.slice().sort(function(a,b){return b.id-a.id;});
   var p = paginate(sorted, 'btmbuch');
@@ -3452,7 +3464,8 @@ function vBtmBuch() {
   });
   html += '</div>'+pageBar('btmbuch',p.pages,p.pg,p.total)+'</div>';
   return html;
-}
+  };
+})();
 
 /* ── NAV + ROUTER ERWEITERN ──────────────────────────────── */
 (function(){
@@ -3460,8 +3473,9 @@ function vBtmBuch() {
   if(qm&&!qm.ch.find(function(c){return c.id==='mhd-vorschau';})) qm.ch.push({id:'mhd-vorschau',lbl:'MHD-Vorschau'});
 })();
 
-var _origCvR4 = cv;
-function cv() {
+(function() {
+  var _origCvR4 = cv;
+  cv = function() {
   switch(S.view) {
     case 'mhd-vorschau': return vMHDVorschau();
     case 'inventur':     return vInventur();
@@ -3470,7 +3484,8 @@ function cv() {
     case 'btmbuch':      return vBtmBuch();
     default:             return _origCvR4();
   }
-}
+  };
+})();
 
 
 // ═══ RUNDE 5: Bilanz · Skonto · EK-Anfragen · Kapazitätsplan ════
@@ -3797,8 +3812,9 @@ function vKapazitaet() {
   if(fibu&&!fibu.ch.find(function(c){return c.id==='bilanz';})) fibu.ch.push({id:'bilanz',lbl:'Bilanz'},{id:'skonto',lbl:'Skonto-Übersicht'});
 })();
 
-var _origCvR5 = cv;
-function cv() {
+(function() {
+  var _origCvR5 = cv;
+  cv = function() {
   switch(S.view) {
     case 'bilanz':       return vBilanz();
     case 'skonto':       return vSkonto();
@@ -3806,7 +3822,8 @@ function cv() {
     case 'kapazitaet':   return vKapazitaet();
     default:             return _origCvR5();
   }
-}
+  };
+})();
 
 
 // ═══ RUNDE 6: BtMVV Einzelabgabe · PDF-Export ════════════════
@@ -3973,8 +3990,9 @@ function druckeBfARMFormular() {
 }
 
 // Lieferscheine-View mit Druckbutton
-var _origVLieferscheine = vLieferscheine;
-function vLieferscheine() {
+(function() {
+  var _origVLieferscheine = vLieferscheine;
+  vLieferscheine = function() {
   var base = _origVLieferscheine();
   // Druckbutton in Tabellenzeilen hinzufügen via Post-Processing nicht möglich,
   // daher eigene Tabelle
@@ -3995,11 +4013,13 @@ function vLieferscheine() {
     '</tr>';
   }).join('')+
   '</tbody></table></div></div>';
-}
+  };
+})();
 
 // Vernichtung-View mit Druckbutton
-var _origVVernichtung = vVernichtung;
-function vVernichtung() {
+(function() {
+  var _origVVernichtung = vVernichtung;
+  vVernichtung = function() {
   return '<div class="ib">ℹ️ <span>§ 19 MedCanG: BtM-Vernichtung · Zeugen-Unterschrift · Druckfähiges Protokoll</span></div>'+
   '<div class="card"><div class="chd"><span class="cttl">♻ Vernichtungsprotokolle – '+DB.vernichtungen.length+'</span>'+
   '<button class="rb pr" onclick="nav(\&#39;chargenfreigaben\&#39;)">→ Über QM-Freigabe vernichten</button></div>'+
@@ -4015,17 +4035,20 @@ function vVernichtung() {
     '<td onclick="event.stopPropagation()"><button class="rb ou" style="font-size:11px;padding:2px 8px" onclick="druckeVernichtungsprotokoll(\&#39;&#39;+v.id+&#39;\&#39;)">🖨 §19</button></td>'+
   '</tr>';}).join('')+
   '</tbody></table></div></div>';
-}
+  };
+})();
 
 // Halbjahresmeldung mit echtem BfArM-PDF
-var _origVHJ = vHalbjahresmeldung;
-function vHalbjahresmeldung() {
+(function() {
+  var _origVHJ = vHalbjahresmeldung;
+  vHalbjahresmeldung = function() {
   var base = _origVHJ();
   return base.replace(
     'onclick="toast(&#39;BfArM-Formular PDF erstellt&#39;,&#39;info&#39;)"',
     'onclick="druckeBfARMFormular()"'
   );
-}
+  };
+})();
 
 /* ── NAV + ROUTER ────────────────────────────────────────── */
 (function(){
@@ -4033,8 +4056,9 @@ function vHalbjahresmeldung() {
   if(qm&&!qm.ch.find(function(c){return c.id==='btm-einzelabgabe';})) qm.ch.push({id:'btm-einzelabgabe',lbl:'BtM-Einzelabgabe §13'});
 })();
 
-var _origCvR6 = cv;
-function cv() {
+(function() {
+  var _origCvR6 = cv;
+  cv = function() {
   switch(S.view) {
     case 'btm-einzelabgabe': return vBtmEinzelabgabe();
     case 'lieferscheine':    return vLieferscheine();
@@ -4042,7 +4066,8 @@ function cv() {
     case 'halbjahresmeldung':return vHalbjahresmeldung();
     default:                 return _origCvR6();
   }
-}
+  };
+})();
 
 
 // ═══ RUNDE 7: Supabase-Anbindung + Login-Screen ══════════════
@@ -4134,8 +4159,9 @@ async function sbPersistiereBuchung(tabelle, datensatz) {
 }
 
 // Audit-Log in Supabase schreiben
-var _origLogAudit = logAudit;
-function logAudit(aktion, tabelle, datensatz_id, alteWerte, neueWerte) {
+(function() {
+  var _origLogAudit = logAudit;
+  logAudit = function(aktion, tabelle, datensatz_id, alteWerte, neueWerte) {
   var entry = _origLogAudit(aktion, tabelle, datensatz_id, alteWerte, neueWerte);
   if(SUPABASE_CONFIG.connected && entry) {
     sbPersistiereBuchung('audit_log', {
@@ -4146,7 +4172,8 @@ function logAudit(aktion, tabelle, datensatz_id, alteWerte, neueWerte) {
     });
   }
   return entry;
-}
+  };
+})();
 
 /* ── LOGIN-SCREEN ────────────────────────────────────────── */
 S.loginScreen = false; // false = Demo-Modus (sofort rein); true = Login erforderlich
@@ -4263,14 +4290,17 @@ function vSupabaseStatus() {
 }
 
 /* ── DRAW ÜBERSCHREIBEN: LOGIN-SCREEN EINBAUEN ───────────── */
-var _origDraw = draw;
-function draw() {
-  if(S.loginScreen) {
-    document.getElementById('app').innerHTML = vLoginScreen() + toastEl();
-    return;
-  }
-  _origDraw();
-}
+// Runde 7: draw() erweitern (hoisting-sicher via IIFE)
+(function() {
+  var _origDraw = draw;
+  draw = function() {
+    if(S.loginScreen) {
+      document.getElementById('app').innerHTML = vLoginScreen() + toastEl();
+      return;
+    }
+    _origDraw();
+  };
+})();
 
 /* ── NAV + ROUTER ────────────────────────────────────────── */
 (function(){
@@ -4278,13 +4308,15 @@ function draw() {
   if(sys&&!sys.ch.find(function(c){return c.id==='supabase';})) sys.ch.push({id:'supabase',lbl:'Supabase / Persistenz'});
 })();
 
-var _origCvR7 = cv;
-function cv() {
+(function() {
+  var _origCvR7 = cv;
+  cv = function() {
   switch(S.view) {
     case 'supabase': return vSupabaseStatus();
     default:         return _origCvR7();
   }
-}
+  };
+})();
 
 
 // BUGFIX R4: pageBar() mit sicheren onclick (keine single-quotes in JS-Strings)
