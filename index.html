@@ -2499,8 +2499,9 @@ if(!NAV.find(g=>g.id==='system')) {
 }
 
 /* ── 12. ROUTER ERWEITERN (cv override) ───────────────────── */
-const _origCv = cv;
-function cv() {
+(function() {
+  var _origCv = cv;
+  cv = function() {
   switch(S.view) {
     case 'audit-log':         return vAuditLog();
     case 'btm-monatsmeldung': return vBtmMonatsmeldung();
@@ -2508,7 +2509,8 @@ function cv() {
     case 'systemkonfig':      return vSystemKonfig();
     default:                  return _origCv();
   }
-}
+};
+})();
 
 
 
@@ -2733,8 +2735,9 @@ function vOpportunities() {
   if(fibu&&!fibu.ch.find(function(c){return c.id==='bank';})){fibu.ch.unshift({id:'bank',lbl:'Bank / Zahlungsverkehr'});}
 })();
 
-var _origCvR2=cv;
-function cv(){
+(function() {
+  var _origCvR2 = cv;
+  cv = function() {
   switch(S.view){
     case 'ek-rechnungen':     return vEKRechnungen();
     case 'dreiwege':          return vEKRechnungen();
@@ -2743,7 +2746,8 @@ function cv(){
     case 'opportunities':     return vOpportunities();
     default:                  return _origCvR2();
   }
-}
+};
+})();
 
 
 // === CANNOS RUNDE 3: CRM-Loop + GuV + Gutschriften + Mindestbestand ===
